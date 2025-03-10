@@ -4,6 +4,8 @@ output:
   pdf_document: default
   html_notebook: default
 ---
+https://github.com/mnickols/CSC-302-W1/blob/main/HW2.Rmd 
+
 1. Run the following lines and study how they work. Then state what they do and output for us. 
 ```{r}
 df1=data.frame(Name=c('James','Paul','Richards','Marico','Samantha','Ravi','Raghu',
