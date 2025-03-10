@@ -1,0 +1,104 @@
+---
+title: "Homework 2"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+1. Run the following lines and study how they work. Then state what they do and output for us. 
+```{r}
+df1=data.frame(Name=c('James','Paul','Richards','Marico','Samantha','Ravi','Raghu',
+'Richards','George','Ema','Samantha','Catherine'),
+State=c('Alaska','California','Texas','North Carolina','California','Texas',
+'Alaska','Texas','North Carolina','Alaska','California','Texas'),
+Sales=c(14,24,31,12,13,7,9,31,18,16,18,14))
+
+aggregate(df1$Sales, by=list(df1$State), FUN=sum)
+
+library(dplyr)
+df1 %>% group_by(State) %>% summarise(sum_sales = sum(Sales))
+```
+The first section of this code is setting up the data frame with the States, Names, and Sales.
+The next 2 sections are doing the same thing, but the first is using the in-built aggregate function to sort the data frame by state and the sum of the sales in the 2nd column.
+The final section does this using the dplyr library instead of the in-built tools. This library allows us to rename the column with the sum of sales as well.
+
+Read in WorldCupMatches.csv
+```{r}
+wc = read.csv("C:/Users/Matthew/OneDrive - Umich/Documents/WorldCupMatches.csv", header=T)
+head(wc)
+```
+
+2a) Find the size of the data frame. How many rows, columns?
+```{r}
+nrow(wc)
+ncol(wc)
+```
+
+2b) Use the summary function to report the statistical summary of your data
+```{r}
+summary(wc)
+```
+
+2c) Find how many unique locations
+```{r}
+library(dplyr)
+n_distinct(wc$City)
+```
+
+2d) Find the average attendance
+```{r}
+df = wc[is.na(wc['Attendance'])==F, ]
+mean(df$Attendance)
+```
+
+2e) For each Home Team, what is the total number of goals scored?
+```{r}
+library(dplyr)
+wc %>% group_by(Home.Team.Name) %>% summarise(goals=sum(Home.Team.Goals)) 
+```
+
+2f) What is the average number of attendees for each year? Is there a pattern in the data in that sense?
+```{r}
+library(dplyr)
+wc %>% group_by(Year) %>% summarise(average_attendance = mean(Attendance))
+```
+
+Read in metabolite.csv
+```{r}
+meta = read.csv("C:/Users/Matthew/OneDrive - Umich/Documents/metabolite.csv", header=T)
+head(meta)
+```
+
+3a) Find how many Alzheimer patients there are in the data set
+
+```{r}
+meta %>% group_by(Label) %>% summarise(num_alz = sum(Label == 'Alzheimer'))
+```
+
+
+3b) Determine the number of missing values for each column
+
+```{r}
+colSums(is.na(meta))
+```
+
+
+3c) Remove the rows which has missing value for the Dopamine column and assign the result to a new data frame
+```{r}
+meta2 = meta[is.na(meta['Dopamine'])==F, ]
+```
+
+3d) In the new data frame, replace the missing values in the c4-OH-Pro column with the median value of the same column
+
+```{r}
+meta2$c4.OH.Pro[is.na(meta2$c4.OH.Pro)] <- median(meta2$c4.OH.Pro, na.rm=TRUE)
+```
+
+
+3e) Drop Columns which have more than 25% missing values
+
+```{r}
+meta2[, which(colMeans(!is.na(meta2)) > 0.25)]
+```
+
+
+
